@@ -1,13 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useContext } from 'react';
 import {Link} from 'react-router-dom';
 import Repos from '../repos/Repos';
+import GithubContext from '../../context/github/githubContext';
 
-const  User = ({user, loading, repos, match, getUser, getUserRepos}) => {
+const  User = ({ match}) => {
+    const githubContext = useContext(GithubContext);
+    const { getUser, user, loading, repos, getUserRepos } = githubContext;
+    
     useEffect(() => {
         getUser(match.params.login);
         getUserRepos(match.params.login);
-    },[getUser, getUserRepos, match.params.login]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     const { 
         name,
@@ -71,12 +75,5 @@ const  User = ({user, loading, repos, match, getUser, getUserRepos}) => {
     
 }
 
-User.propTypes = {
-    loading: PropTypes.bool,
-    user: PropTypes.object.isRequired,
-    getuser: PropTypes.func.isRequired,
-    getUserRepos: PropTypes.func.isRequired,
-    repos: PropTypes.array.isRequired,
-}
 
 export default User

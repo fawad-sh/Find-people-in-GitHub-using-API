@@ -5,7 +5,7 @@ import RepoItem from './RepoItem';
 
 export default function Repos({repos}) {
 
-    return repos.map( repo => <RepoItem repo={repo}  key={repos.id} />)
+    return repos.map( repo => <RepoItem key={repos.id} repo={repo}  />)
 }
 
 Repos.propTypes = {
