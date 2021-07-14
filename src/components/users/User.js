@@ -1,40 +1,29 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import Repos from '../repos/Repos';
 
-class User extends Component {
-    componentDidMount() {
-        this.props.getUser(this.props.match.params.login);
-        this.props.getUserRepos(this.props.match.params.login);
-        
-    }
+const  User = ({user, loading, repos, match, getUser, getUserRepos}) => {
+    useEffect(() => {
+        getUser(match.params.login);
+        getUserRepos(match.params.login);
+    },[getUser, getUserRepos, match.params.login]);
 
-    static propTypes = {
-        loading: PropTypes.bool,
-        user: PropTypes.object.isRequired,
-        getuser: PropTypes.func.isRequired,
-        getUserRepos: PropTypes.func.isRequired,
-        repos: PropTypes.array.isRequired,
-    }
+    const { 
+        name,
+        company, blog,
+        avatar_url,
+        location,
+        bio,
+        login,
+        html_url,
+        followers,
+        following,
+        public_repos,
+        public_gists,
+        hireable    
+    } = user;
 
-    render() {
-        const { 
-            name,
-            company, blog,
-            avatar_url,
-            location,
-            bio,
-            login,
-            html_url,
-            followers,
-            following,
-            public_repos,
-            public_gists,
-            hireable    
-        } = this.props.user;
-
-    const { loading, repos } = this.props;
         if (loading) return <h2>Loading...</h2>;
 
         return (
@@ -57,13 +46,13 @@ class User extends Component {
                         }
                         <a href={html_url} className='btn btn-dark my-1'>Vist GitHub Profile</a>
                         <ul>
-                            <li>{login && <Fragment>
+                            <li key={login}>{login && <Fragment>
                                 <strong>Username: </strong> {login}
                             </Fragment>}</li>
-                            <li>{company && <Fragment>
+                            <li key={company}>{company && <Fragment>
                                 <strong>Company: </strong> {company}
                             </Fragment>}</li>
-                            <li>{blog && <Fragment>
+                            <li key={blog}>{blog && <Fragment>
                                 <strong>Blog: </strong> {blog}
                             </Fragment>}</li>
                         </ul>
@@ -79,7 +68,15 @@ class User extends Component {
                 <Repos repos={repos} />
             </>
         )
-    }
+    
+}
+
+User.propTypes = {
+    loading: PropTypes.bool,
+    user: PropTypes.object.isRequired,
+    getuser: PropTypes.func.isRequired,
+    getUserRepos: PropTypes.func.isRequired,
+    repos: PropTypes.array.isRequired,
 }
 
 export default User
